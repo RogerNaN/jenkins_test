@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.9'
+        }
+    }
 
     environment {
         PYTHON_VERSION = '3.9'
@@ -12,25 +16,21 @@ pipeline {
             }
         }
 
-        stage('Setup Python Environment') {
+        stage('Install Dependencies') {
             steps {
                 sh '''
-                    python -m venv venv
-                    source venv/bin/activate
                     pip install --upgrade pip
                     if [ -f requirements.txt ]; then
                         pip install -r requirements.txt
                     fi
                     pip install pytest
                 '''
-            
             }
         }
 
         stage('Run Tests') {
             steps {
                 sh '''
-                    source venv/bin/activate
                     mkdir -p reports
                     pytest --junitxml=reports/test-results.xml
                 '''
