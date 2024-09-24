@@ -5,6 +5,7 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 // 安裝 pytest
+                sh 'python3 --version'
                 sh 'pip install pytest'
             }
         }
