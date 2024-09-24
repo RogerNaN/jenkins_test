@@ -8,7 +8,7 @@ pipeline {
                     docker.image('python:3.10').inside {
                         sh 'python -m venv venv'
                         sh '. venv/bin/activate && pip install pytest'
-                        sh '. venv/bin/activate && pytest'
+                        sh '. venv/bin/activate && pytest --junitxml=results.xml'
                     }
                 }
             }
@@ -17,7 +17,7 @@ pipeline {
 
     post {
         always {
-            junit '**/test-reports/*.xml'
+            junit 'results.xml'
         }
     }
 }
