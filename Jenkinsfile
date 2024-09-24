@@ -2,17 +2,16 @@ pipeline {
     agent any
 
     stages {
-        stage('Install dependencies') {
-            steps {
-                // 安裝 pytest
-                sh 'python3 --version'
-                sh 'pip install pytest'
+        stage('Run Tests in Docker') {
+            agent {
+                docker {
+                    image 'python:3.10'  
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'  // 共享 Docker 容器
+                }
             }
-        }
-
-        stage('Run Tests') {
             steps {
-                // 執行 pytest 來運行測試
+                // 安裝 pytest 並運行測試
+                sh 'pip install pytest'
                 sh 'pytest test_sample.py'
             }
         }
@@ -20,7 +19,7 @@ pipeline {
 
     post {
         always {
-            // 無論測試是否成功，都會保存測試結果
+            // 保存測試結果
             junit '**/test-reports/*.xml'
         }
     }
