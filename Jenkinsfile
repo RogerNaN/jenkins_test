@@ -30,7 +30,7 @@ pipeline {
                 script {
                     docker.image('python:3.10').inside {
                         echo 'Running tests...'
-                        sh '. venv/bin/activate && pytest --junitxml=results.xml' // 運行測試並生成測試報告
+                        sh '. venv/bin/activate && pytest --junitxml=results.xml' // 測試並生成測試報告
                     }
                 }
             }
